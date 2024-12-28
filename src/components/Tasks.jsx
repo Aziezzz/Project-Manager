@@ -14,7 +14,6 @@ const Tasks = ({ tasks }) => {
         onClick={() => openClose("isModal")}
         className="cursor-pointer min-h-[200px] rounded-lg border relative flex items-center justify-center border-dashed border-slate-500 text-white bg-slate-800 hover:bg-slate-700 duration-300 p-4"
       >
-        {/* Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium repudiandae cum voluptates tenetur expedita sequi mollitia suscipit officiis commodi qui animi, ut veniam voluptatum tempora assumenda! Fuga quod facere vel. */}
         <button
           type="button"
           className="border-0 outline-none flex items-center gap-2 text-lg"

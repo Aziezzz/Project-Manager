@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const initialInputs = {
   title: "",
-  desc: "",
+  desc: "", // Perbaiki key dari 'description' menjadi 'desc'
   date: "",
   completed: false,
   important: false,
@@ -56,72 +56,69 @@ const Modal = () => {
         {/* modal body  */}
         <div className="my-5">
           <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
-            <div>
-              <label className="text-lg text-white">Title</label>
-              <input
-                type="text"
-                name="title"
-                value={inputs.title}
-                onChange={handleChange}
-                className="bg-black p-3 mt-2 border-0 w-full h-10 rounded-md text-white placeholder:text-slate-400 outline-none"
-                placeholder="Title"
-              />
-            </div>
-            <div>
-              <label className="text-lg text-white">Description</label>
-              <textarea
-                type="text"
-                name="desc"
-                value={inputs.desc}
-                onChange={handleChange}
-                className="bg-black border-0 p-3 mt-2 w-full h-20 rounded-md text-white placeholder:text-slate-400 outline-none"
-                placeholder="Description"
-              ></textarea>
-            </div>
-            <div>
-              <label className="text-lg text-white">Date</label>
-              <input
-                type="date"
-                value={inputs.date}
-                name="date"
-                onChange={handleChange}
-                className="bg-black border-0 p-3 mt-2 w-full h-10 rounded-md text-white placeholder:text-slate-400 outline-none"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <label
-                  className="text-lg text-white cursor-pointer"
-                  htmlFor="completed"
-                >
-                  Completed
-                </label>
-                <input
-                  type="checkbox"
-                  name="completed"
-                  onChange={handleChange}
-                  value={inputs.completed}
-                  className="bg-black border-0 h-10 cursor-pointer outline-none"
-                  id="completed"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <label
-                  className="text-lg text-white cursor-pointer"
-                  htmlFor="important"
-                >
-                  Important
-                </label>
-                <input
-                  type="checkbox"
-                  name="important"
-                  onChange={handleChange}
-                  value={inputs.important}
-                  className="bg-black border-0 h-10 cursor-pointer outline-none"
-                  id="important"
-                />
-              </div>
-            </div>
+          <div>
+      <label className="text-lg text-white">Title</label>
+        <input
+          type="text"
+          value={inputs.title}
+          name="title"
+          onChange={handleChange}
+          className="bg-gray-800 border border-gray-600 p-3 mt-2 w-full h-10 rounded-md text-white placeholder:text-slate-400 outline-none"
+        />
+    </div>
+    <div>
+      <label className="text-lg text-white">Description</label>
+        <textarea
+          value={inputs.desc} // Perbaiki key dari 'description' menjadi 'desc'
+          name="desc" // Perbaiki name dari 'description' menjadi 'desc'
+          onChange={handleChange}
+          className="bg-gray-800 border border-gray-600 p-3 mt-2 w-full h-20 rounded-md text-white placeholder:text-slate-400 outline-none"
+      />
+    </div>
+    <div>
+    <label className="text-lg text-white">Date</label>
+      <input
+          type="date"
+          value={inputs.date}
+          name="date"
+          onChange={handleChange}
+          className="bg-gray-800 border border-gray-600 p-3 mt-2 w-full h-10 rounded-md text-white placeholder:text-slate-400 outline-none"
+      />
+    </div>
+    <div className="flex items-center justify-between">
+    <div className="flex items-center gap-2">
+      <label
+          className="text-lg text-white cursor-pointer"
+          htmlFor="completed"
+      >
+          Completed
+      </label>
+      <input
+          type="checkbox"
+          name="completed"
+          onChange={handleChange}
+          value={inputs.completed}
+          className="bg-gray-800 border border-gray-600 h-10 cursor-pointer outline-none"
+          id="completed"
+      />
+    </div>
+    <div className="flex items-center gap-2">
+      <label
+          className="text-lg text-white cursor-pointer"
+          htmlFor="important"
+      >
+          Important
+      </label>
+      <input
+          type="checkbox"
+          name="important"
+          onChange={handleChange}
+          value={inputs.important}
+          className="bg-gray-800 border border-gray-600 h-10 cursor-pointer outline-none"
+          id="important"
+      />
+    </div>
+    </div>
             {/* modal footer  */}
             <div className="flex items-center justify-end">
               <button
