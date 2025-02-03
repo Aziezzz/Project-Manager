@@ -1,0 +1,12 @@
+{
+  "tasks": [
+    {
+      "id": "ZL8vqUtSa9F3zDb2mrhpZ",
+      "title": "PROJECT 1",
+      "desc": "MEMBUAT APLIKASI MOBILE DENGAN FRAMEWORK REACT NATIVE",
+      "date": "2025-01-09",
+      "completed": true,
+      "important": true
+    }
+  ]
+}

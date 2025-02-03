@@ -8,7 +8,7 @@ import AppProvider from "./context/AppContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
+  <BrowserRouter basename="/Project-Manager">
     <AppProvider>
       <App />
     </AppProvider>

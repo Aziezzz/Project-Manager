@@ -1,51 +1,44 @@
-import { nanoid } from "nanoid";
-import { CREATE, EDIT, DELETE, CLOSE_OPEN } from "./actions";
-
-const addLocalStorage = (tasks) => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-};
+import { CREATE, EDIT, DELETE, CLOSE_OPEN, SET_TASKS } from "./actions";
 
 const reducer = (state, action) => {
-    switch (action.type) {
-        case CLOSE_OPEN: {
-            const element = action.payload.element;
-            return { ...state, [element]: !state[element] };
-        }
-        case CREATE: {
-            const task = action.payload.task;
-            const date = task.date || new Date().toLocaleDateString();
-            const id = nanoid();
-            const newTask = { ...task, id, date };
-            const tasks = [...state.tasks, newTask];
-            addLocalStorage(tasks);
-            return { ...state, tasks };
-        }
-        case DELETE: {
-            const id = action.payload.id;
-            const tasks = state.tasks.filter((task) => task.id !== id);
-            addLocalStorage(tasks);
-            return { ...state, tasks };
-        }
-        case EDIT: {
-            const { id, updatedTask } = action.payload; // Ambil id dan updatedTask dari payload
-        
-            // Memperbarui daftar tugas dengan task yang telah diedit
-            const tasks = state.tasks.map((task) => {
-                if (task.id === id) {
-                    return { ...task, ...updatedTask }; // Perbarui tugas dengan data baru
-                }
-                return task; // Kembalikan task yang tidak diubah
-            });
-        
-            // Simpan daftar tugas yang diperbarui ke local storage
-            addLocalStorage(tasks);
-        
-            // Kembalikan state baru dengan daftar tugas yang diperbarui
-            return { ...state, tasks };
-        }
-        default:
-            throw new Error('this action doesn\'t match');
+  switch (action.type) {
+    case CLOSE_OPEN: {
+      const element = action.payload.element;
+      return { ...state, [element]: !state[element] };
     }
+    case SET_TASKS: {
+      // Mengatur data tugas yang di-fetch dari backend
+      const tasks = action.payload.tasks;
+      return { ...state, tasks };
+    }
+    case CREATE: {
+      // Menambahkan tugas baru ke state
+      const task = action.payload.task;
+      const tasks = [...state.tasks, task];
+      return { ...state, tasks };
+    }
+    case DELETE: {
+        // Menghapus tugas dari state
+        const id = action.payload.id;
+        return {
+          ...state,
+          tasks: state.tasks.filter((task) => task.id !== id),
+        };
+      }
+      
+    case EDIT: {
+      // Memperbarui tugas di state
+      const updatedTask = action.payload.task;
+      const tasks = state.tasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task
+      );
+      return { ...state, tasks };
+    }
+    default:
+      throw new Error(`No matching action type: ${action.type}`);
+      
+  }
+  
 };
 
 export default reducer;

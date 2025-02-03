@@ -2,13 +2,20 @@ import { FaPlus } from "react-icons/fa";
 import Task from "./Task";
 import { useContextApp } from "../context/AppContext";
 
-const Tasks = ({ tasks }) => {
-  const { openClose } = useContextApp();
+const Tasks = () => {
+  // Akses state dan fungsi dari AppContext
+  const { tasks, openClose, deleteTask } = useContextApp();
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-4 my-4">
       {tasks?.map((task) => {
-        return <Task key={task.id} task={task} />;
+        return (
+          <Task
+            key={task.id}
+            task={task}
+            deleteTask={deleteTask} // Pastikan fungsi ini diteruskan ke Task
+          />
+        );
       })}
       <div
         onClick={() => openClose("isModal")}

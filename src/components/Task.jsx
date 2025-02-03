@@ -1,47 +1,65 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaEdit, FaRegStar, FaStar, FaTrash } from "react-icons/fa";
-import { useContextApp } from "../context/AppContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const Task = ({ task }) => {
-  const { id, title, desc, date, completed, important } = task;
-  const { deleteTask, edit } = useContextApp();
-  
+const Task = ({ task, deleteTask }) => {
+  const { id, title, desc, date } = task;
+  const navigate = useNavigate(); // Initialize useNavigate
+
   // State untuk menyimpan nilai edit
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedDesc, setEditedDesc] = useState(desc);
-  const [updatedTask, setUpdatedTask] = useState(task); // State untuk menyimpan task yang diperbarui
+  const [updatedTask, setUpdatedTask] = useState(task);
 
-  // UseEffect untuk memuat data dari local storage
-  useEffect(() => {
-    const storedTask = localStorage.getItem(`task-${id}`);
-    if (storedTask) {
-      const parsedTask = JSON.parse(storedTask);
-      setEditedTitle(parsedTask.title);
-      setEditedDesc(parsedTask.desc);
-    }
-  }, [id]);
-
-  const toggle = (element) => {
-    toast.success("Successfully Updated.");
+  const toggle = async (element) => {
     const newTask = { ...updatedTask, [element]: !updatedTask[element] };
     setUpdatedTask(newTask);
-    edit(newTask);
+
+    try {
+      await fetch(`http://localhost:3001/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+      toast.success("Task updated successfully.");
+
+      // Navigasi untuk mengarah page
+      if (element === "completed" && newTask.completed) {
+        navigate("/completed");
+      } else if (element === "important" && newTask.important) {
+        navigate("/important");
+      }
+    } catch (error) {
+      toast.error("Failed to update task.");
+    }
   };
 
-  const remove = () => {
-    toast.success("Successfully Deleted.");
-    deleteTask(id);
+  const handleDelete = () => {
+    deleteTask(id); // Menggunakan fungsi deleteTask dari context
+    toast.success("Task deleted successfully.");
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     const newTask = { ...updatedTask, title: editedTitle, desc: editedDesc };
     setUpdatedTask(newTask);
-    edit(newTask);
-    localStorage.setItem(`task-${id}`, JSON.stringify(newTask)); // Simpan ke local storage
-    toast.success("Task Updated Successfully.");
-    setIsEditing(false); // Tutup form edit
+
+    try {
+      await fetch(`http://localhost:3001/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+      toast.success("Task updated successfully.");
+      setIsEditing(false); // Tutup form edit
+    } catch (error) {
+      toast.error("Failed to update task.");
+    }
   };
 
   return (
@@ -82,7 +100,6 @@ const Task = ({ task }) => {
           updatedTask.desc.substring(0, 100)
         )}
       </p>
-      {/* buttons  */}
       <div className="mt-4">
         <p className="text-md mb-2 text-white">{updatedTask.date}</p>
         <div className="flex items-center justify-between">
@@ -92,11 +109,14 @@ const Task = ({ task }) => {
               updatedTask.completed ? "bg-green-600" : "bg-red-500"
             }`}
           >
-            {updatedTask.completed ? "Completed" : "InComplete"}
+            {updatedTask.completed ? "Completed" : "Incomplete"}
           </button>
-          <div className="flex items-center gap-3">
+          <div className="absolute bottom-4 right-4 flex items-center gap-3">
             {isEditing ? (
-              <button onClick={handleEdit} className="text-2xl text-gray-400 cursor-pointer">
+              <button
+                onClick={handleEdit}
+                className="text-2xl text-gray-400 cursor-pointer"
+              >
                 Save
               </button>
             ) : (
@@ -107,9 +127,20 @@ const Task = ({ task }) => {
             )}
             <FaTrash
               className="text-2xl text-gray-400 cursor-pointer"
-              onClick={remove}
+              onClick={handleDelete}
             />
           </div>
+
+         {/* Render task details */}
+         <button onClick={() => toggle("completed")}>
+        {updatedTask.completed}
+        </button>
+        <button onClick={() => toggle("important")}>
+        {updatedTask.important}
+        </button>
+        <button onClick={() => deleteTask(id)}>
+        </button>
+        
         </div>
       </div>
     </div>
